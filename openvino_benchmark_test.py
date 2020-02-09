@@ -32,4 +32,4 @@ t = time.time()
 vino_test.main('test_model.labels', 'fp32/resnet18.xml', input_image,)
 vino_test_time = time.time()-t
 
-print('this test ran in {} seconds for PyTorch compared to {} seconds in openVINO'.format(pytorch_test_time,vino_test_time))
+print('this test ran in {:.4f} seconds for PyTorch compared to {:.4f} seconds in openVINO'.format(pytorch_test_time,vino_test_time))
