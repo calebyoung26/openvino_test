@@ -4,7 +4,7 @@ import torch, time, subprocess
 from datetime import datetime
 import torchvision.models as models
 
-input_image = 'dog.jpeg'
+input_image = 'input_images/dog.jpeg'
 resnet18_model = models.resnet18(pretrained=True)
 # Create some sample input in the shape this model expects
 dummy_input = torch.randn(10, 3, 224, 224)
