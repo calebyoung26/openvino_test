@@ -62,7 +62,7 @@ class Openvino_test():
         if cpu_extension and 'CPU' in device:
             plugin.add_cpu_extension(cpu_extension)
         # Read IR
-        log.info("Loading network files:\n\t{}\n\t{}".format(model_xml, model_bin))
+        #log.info("Loading network files:\n\t{}\n\t{}".format(model_xml, model_bin))
         net = IENetwork(model=model_xml, weights=model_bin)
 
         if plugin.device == "CPU":
@@ -78,7 +78,7 @@ class Openvino_test():
         assert len(net.inputs.keys()) == 1, "Sample supports only single input topologies"
         assert len(net.outputs) == 1, "Sample supports only single output topologies"
 
-        log.info("Preparing input blobs")
+        #log.info("Preparing input blobs")
         input_blob = next(iter(net.inputs))
         out_blob = next(iter(net.outputs))
         net.batch_size = 1 #changed from "len(input_img)" because args created a list of images
@@ -90,11 +90,11 @@ class Openvino_test():
             img = Image.open(input_img)
             image = cv2.imread(input_img)
             if image.shape[:-1] != (h, w):
-                log.warning("Image {} is resized from {} to {}".format(input_img[i], image.shape[:-1], (h, w)))
+                #log.warning("Image {} is resized from {} to {}".format(input_img[i], image.shape[:-1], (h, w)))
                 image = cv2.resize(image, (w, h))
             image = image.transpose((2, 0, 1))  # Change data layout from HWC to CHW
             images[i] = image
-        log.info("Batch size is {}".format(n))
+        #log.info("Batch size is {}".format(n))
 
         # Read input vector to compare with PyTorch
         if read_vector_from_file:
@@ -103,21 +103,21 @@ class Openvino_test():
             images[0] = r
     
         # Loading model to the plugin
-        log.info("Loading model to the plugin")
+        #log.info("Loading model to the plugin")
         exec_net = plugin.load(network=net)
         del net
 
         # Start sync inference
-        log.info("Starting inference ({} iterations)".format(number_iter))
+        #log.info("Starting inference ({} iterations)".format(number_iter))
         infer_time = []
         for i in range(number_iter):
             t0 = time()
             res = exec_net.infer(inputs={input_blob: images})
             infer_time.append((time()-t0)*1000)
-        log.info("Average running time of one iteration: {} ms".format(np.average(np.asarray(infer_time))))
+        #log.info("Average running time of one iteration: {} ms".format(np.average(np.asarray(infer_time))))
         if perf_counts:
             perf_counts = exec_net.requests[0].get_perf_counts()
-            log.info("Performance counters:")
+            #log.info("Performance counters:")
             #print("{:<70} {:<15} {:<15} {:<15} {:<10}".format('name', 'layer_type', 'exet_type', 'status', 'real_time, us'))
             for layer, stats in perf_counts.items():
                 pass
@@ -125,12 +125,12 @@ class Openvino_test():
                 #                                                  stats['status'], stats['real_time']))
 
         # Processing output blob
-        log.info("Processing output blob")
+        #log.info("Processing output blob")
         res = res[out_blob]
 
         #print (res[0][0:10])
 
-        log.info("Top {} results: ".format(number_top))
+        #log.info("Top {} results: ".format(number_top))
         if labels:
             with open(labels, 'r') as f:
                 labels_map = [x.split(sep=' ', maxsplit=1)[-1].strip() for x in f]

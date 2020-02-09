@@ -43,4 +43,5 @@ class Pytorch_test():
         print('<<<<<<<<<<<RESULTS FOR PYTORCH>>>>>>>>>>>>')
         for i, probs in enumerate(res18):
             if (i<10):
-                print( labels_map[indices[i]], "\t\t", values[i], indices[i])
+                #print( labels_map[indices[i]], values[i].item(), indices[i])
+                print("{:.7f} label {}".format(values[i].item(), labels_map[indices[i]]))
