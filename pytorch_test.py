@@ -40,7 +40,7 @@ class Pytorch_test():
         else:
             labels_map = None
 
-        print("Top {} results:\n===============\n".format(10))
+        print('<<<<<<<<<<<RESULTS FOR PYTORCH>>>>>>>>>>>>')
         for i, probs in enumerate(res18):
             if (i<10):
                 print( labels_map[indices[i]], "\t\t", values[i], indices[i])

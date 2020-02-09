@@ -81,15 +81,13 @@ class Openvino_test():
         log.info("Preparing input blobs")
         input_blob = next(iter(net.inputs))
         out_blob = next(iter(net.outputs))
-        net.batch_size = len(input_img)
+        net.batch_size = 1 #changed from "len(input_img)" because args created a list of images
 
         # Read and pre-process input images
         n, c, h, w = net.inputs[input_blob].shape
-        print(n)
         images = np.ndarray(shape=(n, c, h, w))
         for i in range(n):
             img = Image.open(input_img)
-            print(img.size)
             image = cv2.imread(input_img)
             if image.shape[:-1] != (h, w):
                 log.warning("Image {} is resized from {} to {}".format(input_img[i], image.shape[:-1], (h, w)))
@@ -143,6 +141,7 @@ class Openvino_test():
             top_ind = np.argsort(probs)[-number_top:][::-1]
             #print("Image {}\n".format(args.input[i]))
 
+            print('\n<<<<<<<<<<<RESULTS FOR OPENVINO>>>>>>>>>>>>')
             for id in top_ind:
                 det_label = labels_map[id] if labels_map else "#{}".format(id)
                 print("{:.7f} label {}".format(probs[id], det_label))
