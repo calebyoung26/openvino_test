@@ -4,6 +4,9 @@ import torch, time, subprocess
 from datetime import datetime
 import torchvision.models as models
 
+# number of iterations to run on pytorch and openvino comparison test
+number_iter = 1000
+
 input_image = 'input_images/dog.jpeg'
 resnet18_model = models.resnet18(pretrained=True)
 # Create some sample input in the shape this model expects
@@ -24,12 +27,7 @@ vino_test = openvino_test.Openvino_test()
 
 
 
-t = time.time()
-py_test.run(input_image)
-pytorch_test_time = time.time()-t
 
-t = time.time()
-vino_test.main('test_model.labels', 'fp32/resnet18.xml', input_image,)
-vino_test_time = time.time()-t
+py_test.run(input_image,number_iter=number_iter)
 
-print('this test ran in {:.4f} seconds for PyTorch compared to {:.4f} seconds in openVINO'.format(pytorch_test_time,vino_test_time))
+vino_test.main('test_model.labels', 'fp32/resnet18.xml', input_image,number_iter=number_iter)

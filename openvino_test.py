@@ -110,10 +110,10 @@ class Openvino_test():
         # Start sync inference
         #log.info("Starting inference ({} iterations)".format(number_iter))
         infer_time = []
+        t0 = time()
         for i in range(number_iter):
-            t0 = time()
             res = exec_net.infer(inputs={input_blob: images})
-            infer_time.append((time()-t0)*1000)
+        infer_time.append((time()-t0))
         #log.info("Average running time of one iteration: {} ms".format(np.average(np.asarray(infer_time))))
         if perf_counts:
             perf_counts = exec_net.requests[0].get_perf_counts()
@@ -146,6 +146,7 @@ class Openvino_test():
                 det_label = labels_map[id] if labels_map else "#{}".format(id)
                 print("{:.7f} label {}".format(probs[id], det_label))
             print("\n")
+            print("OpenVINO ran {} iterations in {} seconds".format(number_iter,infer_time))
 
         del exec_net
         del plugin
